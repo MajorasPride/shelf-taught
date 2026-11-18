@@ -46,7 +46,8 @@ function shelfPage(id) {
     ${s.guides.length ? `<button class="pdf" type="button" data-print-shelf="${s.id}">Download the whole shelf as PDF</button>` : ""}
     ${s.guides.length
       ? sectionsOf(s).map(x => `${x.name ? `<h2>${esc(x.name)}</h2>` : ""}${x.blurb ? `<p class="section-blurb">${esc(x.blurb)}</p>` : ""}
-          <ul class="book-list">${x.guides.map(bookItem).join("")}</ul>`).join("")
+          <ul class="book-list">${x.guides.map(bookItem).join("")}</ul>
+          ${x.review && REVIEWS[x.review] ? `<p><a class="review-link" href="#/review/${x.review}">${esc(x.name)} review quiz: ${REVIEWS[x.review].quiz.length} mixed questions</a></p>` : ""}`).join("")
       : `<p class="empty-note">This shelf is empty for now. Its first guides are on the way.</p>`}
     ${s.links ? `<h2>Free libraries to borrow from</h2>
       <ul>${s.links.map(l => `<li><a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.title)}</a></li>`).join("")}</ul>` : ""}`;
@@ -64,6 +65,12 @@ function guidePage(id, solo = true) {
       ${solo ? `<button class="pdf" type="button" data-print>Download as PDF</button>` : ""}
       <p>${esc(g.summary)}</p>
 
+      ${g.canDo ? `<h2>What you can do with this</h2>
+      <ul>${g.canDo.map(c => `<li>${esc(c)}</li>`).join("")}</ul>` : ""}
+
+      ${g.words ? `<h2>Words to know</h2>
+      <dl class="words">${g.words.map(w => `<dt>${esc(w.word)}</dt><dd>${esc(w.meaning)}</dd>`).join("")}</dl>` : ""}
+
       <h2>Think of it like this</h2>
       <p class="analogy">${esc(g.analogy)}</p>
 
@@ -74,7 +81,8 @@ function guidePage(id, solo = true) {
       </table></div>
 
       <h2>Steps</h2>
-      <ol class="steps">${g.steps.map(x => `<li>${esc(x)}</li>`).join("")}</ol>
+      <ol class="steps">${g.steps.map(x => typeof x === "string" ? `<li>${esc(x)}</li>`
+        : `<li>${esc(x.do)}${x.happened ? `<p class="happened"><strong>What just happened:</strong> ${esc(x.happened)}</p>` : ""}</li>`).join("")}</ol>
 
       <h2>The picture</h2>
       <figure>${g.diagram}<figcaption>${esc(g.diagramCaption)}</figcaption></figure>
@@ -88,22 +96,78 @@ function guidePage(id, solo = true) {
       <h2>Common mistakes</h2>
       <ul>${g.mistakes.map(m => `<li>${esc(m)}</li>`).join("")}</ul>
 
+      ${g.tryIt ? `<h2>Try it yourself</h2>
+      ${g.tryIt.map((t, i) => `<div class="try">
+        <p><strong>Challenge ${i + 1}:</strong> ${esc(t.task)}</p>
+        ${t.hint ? `<details><summary>Show a hint</summary><p>${esc(t.hint)}</p></details>` : ""}
+        <details><summary>Show the answer</summary><pre><code>${esc(t.answer)}</code></pre></details>
+      </div>`).join("")}` : ""}
+
       <h2>Check yourself</h2>
-      ${g.quiz.map((q, qi) => `
-        <div class="q" data-q="${qi}">
-          <p>${esc(q.q)}</p>
-          ${q.options.map((o, oi) => `<button type="button" data-o="${oi}">${esc(o)}</button>`).join("")}
-          <p class="why" hidden aria-live="polite"></p>
-          <p class="answer-key">Answer: ${esc(q.options[q.answer])}. ${esc(q.why)}</p>
-        </div>`).join("")}
+      ${quizHtml(g.quiz, "g:" + id)}
 
       <h2>Go deeper</h2>
       <ul>${g.links.map(l => `<li><a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.title)}</a></li>`).join("")}</ul>
+      ${solo ? nextBook(id) : ""}
+    </article>`;
+}
+
+// Tap-to-answer questions. src says where the questions live: "g:<guide id>" or "r:<review id>".
+// Options are shown in a shuffled order that's the same on every visit (seeded by the question),
+// so the right answer isn't always in the same spot. data-o keeps each option's real number.
+function shuffledOrder(q) {
+  let seed = [...q.q].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 17);
+  const order = q.options.map((_, i) => i);
+  for (let i = order.length - 1; i > 0; i--) {
+    seed = (seed * 1103515245 + 12345) >>> 0;
+    const j = seed % (i + 1);
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  return order;
+}
+
+function quizHtml(quiz, src) {
+  return quiz.map((q, qi) => `
+    <div class="q" data-src="${src}" data-q="${qi}">
+      <p>${esc(q.q)}</p>
+      ${shuffledOrder(q).map(oi => `<button type="button" data-o="${oi}">${esc(q.options[oi])}</button>`).join("")}
+      <p class="why" hidden aria-live="polite"></p>
+      <p class="answer-key">Answer: ${esc(q.options[q.answer])}. ${esc(q.why)}</p>
+    </div>`).join("");
+}
+const quizFor = src => src.startsWith("r:") ? REVIEWS[src.slice(2)].quiz : GUIDES[src.slice(2)].quiz;
+
+// The next book on the same shelf, or the section's review quiz when it's the last book in a section.
+function nextBook(id) {
+  const s = shelfById(GUIDES[id].shelf);
+  const sec = sectionsOf(s).find(x => x.guides.includes(id));
+  const i = sec.guides.indexOf(id);
+  if (i < sec.guides.length - 1) {
+    const n = sec.guides[i + 1];
+    return `<p class="next"><a href="#/guide/${n}">Next book: ${esc(GUIDES[n].title)} →</a></p>`;
+  }
+  return sec.review && REVIEWS[sec.review] ? `<p class="next"><a href="#/review/${sec.review}">Next: the ${esc(sec.name)} review quiz →</a></p>` : "";
+}
+
+function reviewPage(rid) {
+  const r = REVIEWS[rid];
+  if (!r) return notFound();
+  const s = shelfById(r.shelf);
+  const secs = sectionsOf(s);
+  const at = secs.findIndex(x => x.review === rid);
+  const after = secs[at + 1];
+  return `
+    <article class="guide">
+      <p class="crumbs"><a href="#/">Library</a> / <a href="#/shelf/${s.id}">${esc(s.name)}</a></p>
+      <h1>${esc(r.title)}</h1>
+      <p>${esc(r.intro)}</p>
+      ${quizHtml(r.quiz, "r:" + rid)}
+      ${after ? `<p class="next"><a href="#/guide/${after.guides[0]}">Next section, ${esc(after.name)}: ${esc(GUIDES[after.guides[0]].title)} →</a></p>` : ""}
     </article>`;
 }
 
 function searchPage(words) {
-  const items = Object.entries(GUIDES).map(([id, g]) => ({ id, title: g.title, summary: g.summary, tags: g.tags.join(" "), shelf: shelfById(g.shelf).name }));
+  const items = Object.entries(GUIDES).map(([id, g]) => ({ id, title: g.title, summary: g.summary, tags: g.tags.concat((g.words || []).map(w => w.word)).join(" "), shelf: shelfById(g.shelf).name }));
   let hits;
   if (window.Fuse) {
     hits = new Fuse(items, { keys: ["title", "tags", "shelf", "summary"], threshold: 0.4, ignoreLocation: true }).search(words).map(r => r.item);
@@ -126,6 +190,7 @@ function route() {
   main.innerHTML =
     kind === "shelf" ? shelfPage(arg) :
     kind === "guide" ? guidePage(arg) :
+    kind === "review" ? reviewPage(arg) :
     kind === "search" ? searchPage(arg) : home();
   window.scrollTo(0, 0);
   if (location.hash) main.focus();
@@ -150,7 +215,7 @@ main.addEventListener("click", e => {
   const btn = e.target.closest(".q button");
   if (!btn) return;
   const box = btn.closest(".q");
-  const q = GUIDES[location.hash.split("/")[2]].quiz[box.dataset.q];
+  const q = quizFor(box.dataset.src)[box.dataset.q];
   const right = Number(btn.dataset.o) === q.answer;
   box.querySelectorAll("button").forEach(b => b.removeAttribute("data-state"));
   btn.dataset.state = right ? "right" : "wrong";
@@ -164,6 +229,9 @@ document.getElementById("search-form").addEventListener("submit", e => {
   const v = document.getElementById("q").value.trim();
   if (v) location.hash = "#/search/" + encodeURIComponent(v);
 });
+
+// In a PDF, hints and answers to the challenges print open.
+window.addEventListener("beforeprint", () => main.querySelectorAll("details").forEach(d => { d.open = true; }));
 
 window.addEventListener("hashchange", route);
 route();

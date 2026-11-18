@@ -143,6 +143,18 @@ th { font-family: var(--display); }
 .q button[data-state="wrong"] { background: #f6dede; border-color: #a33a3a; }
 .why { margin: .6rem 0 0; }
 
+/* Deeper guides: words to know, what just happened, challenges, next book */
+.words { background: #fff; padding: .8rem 1rem; border: 1px solid #d5d7cf; }
+.words dt { font-weight: 700; font-family: var(--display); font-size: 1.1rem; }
+.words dd { margin: 0 0 .6rem; }
+.happened { margin: .3rem 0 .8rem; padding: .4rem .7rem; background: #fff; border-left: 4px solid var(--lamp); font-size: .97rem; }
+.try { background: #fff; padding: .8rem 1rem; margin: .8rem 0; border: 2px dashed var(--brass); }
+.try p { margin-top: 0; }
+details { margin: .4rem 0; }
+summary { cursor: pointer; color: var(--lamp); font-weight: 700; }
+pre { background: var(--paper); padding: .6rem .8rem; overflow-x: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
+.next a, .review-link { display: inline-block; font: 700 1.1rem var(--display); background: var(--lamp); color: #fff; padding: .6rem 1rem; border-radius: 4px; text-decoration: none; margin-top: 1rem; }
+
 .foot { text-align: center; color: var(--muted); padding: 2rem 1rem; font-family: var(--display); }
 
 .pdf {
@@ -153,11 +165,12 @@ th { font-family: var(--display); }
 
 /* Printing / Save as PDF: plain pages, answers printed under each question */
 @media print {
-  .top, .foot, .pdf, .crumbs, .skip, .q button, .why { display: none !important; }
+  .top, .foot, .pdf, .crumbs, .skip, .q button, .why, .next, summary { display: none !important; }
+  .print-section { break-before: page; }
   body { background: #fff; font-size: 11pt; }
   main { padding: 0; max-width: none; }
   .guide + .guide { break-before: page; }
-  .q, figure, table, .analogy { break-inside: avoid; }
+  .q, figure, table, .analogy, .try, .happened { break-inside: avoid; }
   .answer-key { display: block; font-style: italic; }
   a::after { content: " (" attr(href) ")"; font-size: 9pt; color: #555; }
   .crumbs a::after, .book::after { content: none; }

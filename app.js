@@ -41,12 +41,13 @@ function shelfPage(id) {
     <p class="crumbs"><a href="#/">Library</a> / ${esc(s.wing.name)}</p>
     <h1>${esc(s.name)}</h1>
     <p class="lede">${esc(s.blurb)}</p>
+    ${s.guides.length ? `<button class="pdf" type="button" data-print-shelf="${s.id}">Download the whole shelf as PDF</button>` : ""}
     ${s.guides.length
       ? `<ul class="book-list">${s.guides.map(bookItem).join("")}</ul>`
       : `<p class="empty-note">This shelf is empty for now. Its first guides are on the way.</p>`}`;
 }
 
-function guidePage(id) {
+function guidePage(id, solo = true) {
   const g = GUIDES[id];
   if (!g) return notFound();
   const s = shelfById(g.shelf);
@@ -55,6 +56,7 @@ function guidePage(id) {
       <p class="crumbs"><a href="#/">Library</a> / <a href="#/shelf/${s.id}">${esc(s.name)}</a></p>
       <h1>${esc(g.title)}</h1>
       <ul class="facts"><li>${esc(g.difficulty)}</li><li>${esc(g.time)}</li><li>${esc(g.cost)}</li></ul>
+      ${solo ? `<button class="pdf" type="button" data-print>Download as PDF</button>` : ""}
       <p>${esc(g.summary)}</p>
 
       <h2>Think of it like this</h2>
@@ -87,6 +89,7 @@ function guidePage(id) {
           <p>${esc(q.q)}</p>
           ${q.options.map((o, oi) => `<button type="button" data-o="${oi}">${esc(o)}</button>`).join("")}
           <p class="why" hidden aria-live="polite"></p>
+          <p class="answer-key">Answer: ${esc(q.options[q.answer])}. ${esc(q.why)}</p>
         </div>`).join("")}
 
       <h2>Go deeper</h2>
@@ -122,6 +125,19 @@ function route() {
   window.scrollTo(0, 0);
   if (location.hash) main.focus();
 }
+
+// PDFs: the browser's own "Save as PDF" in the print dialog. Works on phone and laptop, no library needed.
+main.addEventListener("click", e => {
+  const one = e.target.closest("[data-print]");
+  const shelf = e.target.closest("[data-print-shelf]");
+  if (one) window.print();
+  if (shelf) {
+    const s = shelfById(shelf.dataset.printShelf);
+    main.innerHTML = `<h1>${esc(s.name)}</h1>` + s.guides.map(id => guidePage(id, false)).join("");
+    window.addEventListener("afterprint", route, { once: true });
+    window.print();
+  }
+});
 
 // Quiz: tap an answer, see right or wrong and why.
 main.addEventListener("click", e => {

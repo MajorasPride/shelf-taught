@@ -144,6 +144,24 @@ th { font-family: var(--display); }
 
 .foot { text-align: center; color: var(--muted); padding: 2rem 1rem; font-family: var(--display); }
 
+.pdf {
+  font: 700 1rem var(--body); background: var(--lamp); color: #fff;
+  border: 0; border-radius: 4px; padding: .55rem 1rem; margin: .5rem 0 1rem; cursor: pointer;
+}
+.answer-key { display: none; }
+
+/* Printing / Save as PDF: plain pages, answers printed under each question */
+@media print {
+  .top, .foot, .pdf, .crumbs, .skip, .q button, .why { display: none !important; }
+  body { background: #fff; font-size: 11pt; }
+  main { padding: 0; max-width: none; }
+  .guide + .guide { break-before: page; }
+  .q, figure, table, .analogy { break-inside: avoid; }
+  .answer-key { display: block; font-style: italic; }
+  a::after { content: " (" attr(href) ")"; font-size: 9pt; color: #555; }
+  .crumbs a::after, .book::after { content: none; }
+}
+
 @media (prefers-reduced-motion: reduce) { .spine { transition: none; } }
 @media (min-width: 48rem) {
   .top { display: flex; align-items: center; gap: 2rem; padding: 1.25rem 2rem; }

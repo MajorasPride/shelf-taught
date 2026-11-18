@@ -14,3 +14,7 @@ All content lives in `data.js`:
 - **New guide:** add it to `GUIDES`, then put its id in that shelf's `guides` list.
 
 Every guide follows the same template: summary, analogy, tools, steps, picture, comparison table, common mistakes, quiz and links.
+
+## PDFs
+
+Every guide has a **Download as PDF** button, and every shelf can be saved as one PDF. It uses the browser's own Save as PDF, so the quiz answers print under each question for offline use.

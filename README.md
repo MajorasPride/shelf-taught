@@ -16,7 +16,9 @@ All content lives in `data.js`:
 
 ## Shelves filled so far
 
-- **Coding** (10 guides): first program, if, loops, lists, functions, reading errors, Linux terminal, Git, first web page, locking down accounts.
+- **Coding** (10 guides), grouped by language: Python (6), Linux terminal (1), Git (1), HTML (1), Security (1).
+
+A big shelf can use `sections` instead of `guides` to group its books, one heading each.
 
 Every guide follows the same template: summary, analogy, tools, steps, picture, comparison table, common mistakes, quiz and links.
 

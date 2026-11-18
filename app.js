@@ -2,7 +2,9 @@
 const main = document.getElementById("main");
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
-const shelves = WINGS.flatMap(w => w.shelves.map(s => ({ ...s, wing: w })));
+// A shelf has either a plain "guides" list or "sections" (e.g. one per language). Either way, s.guides lists them all.
+const shelves = WINGS.flatMap(w => w.shelves.map(s => ({ ...s, wing: w, guides: s.sections ? s.sections.flatMap(x => x.guides) : s.guides })));
+const sectionsOf = s => s.sections || [{ guides: s.guides }];
 const shelfById = id => shelves.find(s => s.id === id);
 
 // Spines get different heights so the shelf looks real, but stay the same on every visit.
@@ -16,7 +18,7 @@ function home() {
       <section class="wing" aria-labelledby="w-${w.id}">
         <h2 id="w-${w.id}">${esc(w.name)}</h2>
         <div class="shelf">
-          ${w.shelves.map(s => `
+          ${w.shelves.map(raw => shelfById(raw.id)).map(s => `
             <a class="spine${s.guides.length ? "" : " empty"}" href="#/shelf/${s.id}"
                style="--c:${w.color};--h:${spineHeight(s.name)}rem"
                aria-label="${esc(s.name)}, ${s.guides.length} guide${s.guides.length === 1 ? "" : "s"}">
@@ -43,7 +45,8 @@ function shelfPage(id) {
     <p class="lede">${esc(s.blurb)}</p>
     ${s.guides.length ? `<button class="pdf" type="button" data-print-shelf="${s.id}">Download the whole shelf as PDF</button>` : ""}
     ${s.guides.length
-      ? `<ul class="book-list">${s.guides.map(bookItem).join("")}</ul>`
+      ? sectionsOf(s).map(x => `${x.name ? `<h2>${esc(x.name)}</h2>` : ""}${x.blurb ? `<p class="section-blurb">${esc(x.blurb)}</p>` : ""}
+          <ul class="book-list">${x.guides.map(bookItem).join("")}</ul>`).join("")
       : `<p class="empty-note">This shelf is empty for now. Its first guides are on the way.</p>`}
     ${s.links ? `<h2>Free libraries to borrow from</h2>
       <ul>${s.links.map(l => `<li><a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.title)}</a></li>`).join("")}</ul>` : ""}`;
@@ -135,7 +138,8 @@ main.addEventListener("click", e => {
   if (one) window.print();
   if (shelf) {
     const s = shelfById(shelf.dataset.printShelf);
-    main.innerHTML = `<h1>${esc(s.name)}</h1>` + s.guides.map(id => guidePage(id, false)).join("");
+    main.innerHTML = `<h1>${esc(s.name)}</h1>` + sectionsOf(s).map(x =>
+      (x.name ? `<h2 class="print-section">${esc(x.name)}</h2>` : "") + x.guides.map(id => guidePage(id, false)).join("")).join("");
     window.addEventListener("afterprint", route, { once: true });
     window.print();
   }

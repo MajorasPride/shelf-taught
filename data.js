@@ -3,6 +3,8 @@
 // Add outside free resources to a shelf: give it a "links" list.
 // Add a guide: add it to GUIDES and put its id in that shelf's "guides" list.
 // A shelf's "guides" list is in learning order: first book first.
+// A big shelf can use "sections" instead of "guides": [{ name, blurb, guides: [...] }],
+// e.g. one section per language. Each section is in learning order.
 // table.codeCol: which column shows as code (default 2, use -1 for none).
 
 const WINGS = [
@@ -27,7 +29,13 @@ const WINGS = [
   {
     id: "digital", name: "Digital Builder", color: "#1f6b5c",
     shelves: [
-      { id: "coding", name: "Coding", blurb: "Programming, Linux and cybersecurity, from your very first line.", guides: ["first-program", "make-decisions", "repeat-with-loops", "store-lists", "make-functions", "read-errors", "use-terminal", "save-with-git", "first-web-page", "lock-down-accounts"], links: [{ title: "freeCodeCamp", url: "https://www.freecodecamp.org/" }, { title: "The Odin Project", url: "https://www.theodinproject.com/" }] },
+      { id: "coding", name: "Coding", blurb: "Programming, Linux and cybersecurity, from your very first line.", sections: [
+        { name: "Python", blurb: "Your first language: plain words, and it shows you where things go wrong.", guides: ["first-program", "make-decisions", "repeat-with-loops", "store-lists", "make-functions", "read-errors"] },
+        { name: "Linux terminal", blurb: "Typing commands to move around and manage files.", guides: ["use-terminal"] },
+        { name: "Git", blurb: "Save points for your projects, and backing them up to GitHub.", guides: ["save-with-git"] },
+        { name: "HTML", blurb: "The language web pages are written in.", guides: ["first-web-page"] },
+        { name: "Security", blurb: "Keeping your accounts and code safe.", guides: ["lock-down-accounts"] }
+      ], links: [{ title: "freeCodeCamp", url: "https://www.freecodecamp.org/" }, { title: "The Odin Project", url: "https://www.theodinproject.com/" }] },
       { id: "3d", name: "3D & Blender", blurb: "Blender tools and modelling.", guides: [], links: [{ title: "Blender manual", url: "https://docs.blender.org/manual/en/latest/" }] },
       { id: "games", name: "Game Making", blurb: "Engines, UI design, level design and pixel art.", guides: [] },
       { id: "pc", name: "PC Building", blurb: "Picking parts and putting a PC together.", guides: [] }

@@ -13,7 +13,7 @@ A library of simple, broken-down how-to guides to teach yourself from, starting 
 - `guides/<shelf>-reviews.js`: end-of-section review quizzes, added to `REVIEWS`.
 - `guides/diagrams.js`: the pictures (SVG), kept apart so guide files stay readable.
 - A new guide file needs a `<script>` line in `index.html`.
-- **Version tags:** every file in `index.html` ends in `?v=8`. When you change any file, raise the number on all of them (v=9, v=10...) so visitors' browsers fetch the new copies instead of mixing old cached files with new ones.
+- **Version tags:** every file in `index.html` ends in `?v=9`. When you change any file, raise the number on all of them (v=9, v=10...) so visitors' browsers fetch the new copies instead of mixing old cached files with new ones.
 
 ## Add to the library
 
@@ -25,6 +25,19 @@ A library of simple, broken-down how-to guides to teach yourself from, starting 
 ## The guide template
 
 Every guide has, in this order: summary; what you can do with this (`canDo`); words to know (`words`); an everyday analogy; tools (budget pick vs best pick); steps, each with a "what just happened" (`steps: [{ do, happened }]`); a picture; a comparison table; common mistakes; 2–3 "Try it yourself" challenges with a hint and a tap-to-show answer (`tryIt`); 6–8 scenario quiz questions, each with a short "why"; go-deeper links; and difficulty, time and cost tags. The page adds a "Next book" link at the end.
+
+### The learning loop (added Nov 17)
+
+Every guide page also shows, without any extra work per guide:
+
+- **Roadmap level:** which of the shelf's 5 levels the guide is in, and that level's milestone (shelf `roadmap` in `data.js`).
+- **Shelf project:** the piece of the shelf's one tiny project this section builds (shelf `project`, section `project`). Coding's project is a toy login system.
+- **Hint ladder:** Hint 1 (`hint`), Hint 2 (`hint2`, or the first line of a multi-line answer), then the answer.
+- **Teach it back:** explain it in your own words, then compare with a model answer and its must-haves (`teachBack: { model, mustHave }`, kept in `guides/<shelf>-teachback.js`).
+- **Missed questions come back:** after the last quiz question, any missed on the first try reappear with the options in a new order.
+- **Cheat sheet:** built from the words, the first sentence of each step and the mistakes, with its own print button.
+- **I can do this now:** the `canDo` list as checkboxes, saved on the device. A guide with every box ticked gets a ✓ on the shelf, and the roadmap counts them.
+- **Stuck? Ask Claude:** copy-ready fill-in-the-blank prompts (Explain it simply, Hint ladder, Quiz me until it clicks, plus Learn from code on Coding).
 
 Quiz options are shown in a shuffled order that stays the same on every visit, so the right answer isn't always in the same spot. Write the right answer anywhere in `options` and set `answer` to its number (0 = first).
 

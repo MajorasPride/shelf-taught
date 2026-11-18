@@ -163,9 +163,43 @@ pre { background: var(--paper); padding: .6rem .8rem; overflow-x: auto; white-sp
 }
 .answer-key { display: none; }
 
+/* Learning loop: roadmap, shelf project, teach it back, retries, cheat sheet, progress, Ask Claude */
+.roadmap ol, .project ol { padding-left: 1.2rem; }
+.roadmap li { background: #fff; border: 1px solid #d5d7cf; padding: .6rem .8rem; margin: .5rem 0; }
+.roadmap li.here { border: 2px solid var(--brass); }
+.roadmap p { margin: .25rem 0; }
+.you { background: var(--brass); color: #fff; font-size: .8rem; padding: .05rem .5rem; border-radius: 99px; }
+.lvl-count { display: block; color: var(--muted); font-size: .9rem; }
+.project { background: #fff; border-left: 6px solid var(--lamp); padding: .2rem 1rem .6rem; margin: 1.5rem 0; }
+.level-tag, .project-tag { background: #fff; border: 1px solid #d5d7cf; padding: .6rem .8rem; font-size: .97rem; }
+.project-tag { border-left: 4px solid var(--lamp); }
+.done { color: #2e7d4f; }
+.teach { background: #fff; padding: .8rem 1rem; border: 2px dashed var(--lamp); }
+.teach p:first-child { margin-top: 0; }
+.teach textarea { width: 100%; font: inherit; padding: .5rem; border: 1px solid #c9cbc2; border-radius: 4px; }
+.checks li::marker { content: "✔ "; color: #2e7d4f; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.quiz-note { color: var(--muted); }
+.retry-note { background: #fff7e0; border-left: 4px solid var(--brass); padding: .6rem .8rem; }
+.cheat { background: #fffdf6; border: 2px solid var(--walnut); padding: .4rem 1.1rem 1rem; margin: 2rem 0; }
+.cheat h2 { margin-top: .6rem; }
+.cheat h3 { margin: .8rem 0 .2rem; font-size: 1.15rem; }
+.cheat ul, .cheat ol { margin: .2rem 0; }
+.cando { list-style: none; padding: 0; }
+.cando li { background: #fff; border: 1px solid #d5d7cf; padding: .5rem .8rem; margin: .4rem 0; }
+.cando input { width: 1.1rem; height: 1.1rem; margin-right: .4rem; vertical-align: -2px; }
+.prompt { background: #fff; border: 1px solid #d5d7cf; padding: .6rem .9rem; margin: .6rem 0; }
+.prompt p { margin: .2rem 0; }
+.prompt-text { font-size: .97rem; }
+.copy { font: 700 .95rem var(--body); background: var(--paper); border: 1px solid var(--lamp); color: var(--lamp); border-radius: 4px; padding: .3rem .9rem; margin-top: .4rem; cursor: pointer; }
+
 /* Printing / Save as PDF: plain pages, answers printed under each question */
 @media print {
-  .top, .foot, .pdf, .crumbs, .skip, .q button, .why, .next, summary { display: none !important; }
+  .top, .foot, .pdf, .crumbs, .skip, .q button, .why, .next, summary, .copy, .teach textarea, .retry-slot, .quiz-note { display: none !important; }
+  .cheat { break-inside: avoid; }
+  body.print-cheat main > * { display: none !important; }
+  body.print-cheat main > .guide { display: block !important; }
+  body.print-cheat .guide > :not(.cheat) { display: none !important; }
   .print-section { break-before: page; }
   body { background: #fff; font-size: 11pt; }
   main { padding: 0; max-width: none; }

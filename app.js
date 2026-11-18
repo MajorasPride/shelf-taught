@@ -44,7 +44,9 @@ function shelfPage(id) {
     ${s.guides.length ? `<button class="pdf" type="button" data-print-shelf="${s.id}">Download the whole shelf as PDF</button>` : ""}
     ${s.guides.length
       ? `<ul class="book-list">${s.guides.map(bookItem).join("")}</ul>`
-      : `<p class="empty-note">This shelf is empty for now. Its first guides are on the way.</p>`}`;
+      : `<p class="empty-note">This shelf is empty for now. Its first guides are on the way.</p>`}
+    ${s.links ? `<h2>Free libraries to borrow from</h2>
+      <ul>${s.links.map(l => `<li><a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.title)}</a></li>`).join("")}</ul>` : ""}`;
 }
 
 function guidePage(id, solo = true) {

@@ -1,12 +1,13 @@
 // Shelf Taught library data.
 // Add a shelf: put it in a wing's "shelves" list.
+// Add outside free resources to a shelf: give it a "links" list.
 // Add a guide: add it to GUIDES and put its id in that shelf's "guides" list.
 
 const WINGS = [
   {
     id: "creative", name: "Creative Arts", color: "#7a3b62",
     shelves: [
-      { id: "art", name: "Art", blurb: "Drawing, color theory, shading, painting styles and techniques.", guides: [] },
+      { id: "art", name: "Art", blurb: "Drawing, color theory, shading, painting styles and techniques.", guides: [], links: [{ title: "Drawabox (free drawing course)", url: "https://drawabox.com/" }] },
       { id: "animation", name: "Animation", blurb: "2D and 3D motion.", guides: [] },
       { id: "photo-video", name: "Photo & Video", blurb: "Photography and videography.", guides: [] },
       { id: "writing", name: "Writing & Story", blurb: "Characters, dialogue and worldbuilding.", guides: [] },
@@ -16,7 +17,7 @@ const WINGS = [
   {
     id: "sound", name: "Sound & Voice", color: "#2f5d8a",
     shelves: [
-      { id: "music", name: "Music", blurb: "Reading music, guitar, piano, drums, mandolin and kalimba.", guides: [] },
+      { id: "music", name: "Music", blurb: "Reading music, guitar, piano, drums, mandolin and kalimba.", guides: [], links: [{ title: "musictheory.net (reading music, free)", url: "https://www.musictheory.net/" }] },
       { id: "production", name: "Music Production", blurb: "Studio basics, layering, sound design and mixing.", guides: [] },
       { id: "voice", name: "Voice & Speaking", blurb: "Singing, clear speech, giving talks and everyday conversation.", guides: [] }
     ]
@@ -24,8 +25,8 @@ const WINGS = [
   {
     id: "digital", name: "Digital Builder", color: "#1f6b5c",
     shelves: [
-      { id: "coding", name: "Coding", blurb: "Programming, Linux and cybersecurity, from your very first line.", guides: ["first-program"] },
-      { id: "3d", name: "3D & Blender", blurb: "Blender tools and modelling.", guides: [] },
+      { id: "coding", name: "Coding", blurb: "Programming, Linux and cybersecurity, from your very first line.", guides: ["first-program"], links: [{ title: "freeCodeCamp", url: "https://www.freecodecamp.org/" }, { title: "The Odin Project", url: "https://www.theodinproject.com/" }] },
+      { id: "3d", name: "3D & Blender", blurb: "Blender tools and modelling.", guides: [], links: [{ title: "Blender manual", url: "https://docs.blender.org/manual/en/latest/" }] },
       { id: "games", name: "Game Making", blurb: "Engines, UI design, level design and pixel art.", guides: [] },
       { id: "pc", name: "PC Building", blurb: "Picking parts and putting a PC together.", guides: [] }
     ]
@@ -36,8 +37,8 @@ const WINGS = [
       { id: "crafts", name: "Crafts & Making", blurb: "Cricut, 3D printing and sewing.", guides: [] },
       { id: "woodworking", name: "Woodworking", blurb: "Tool basics up to building a shed.", guides: [] },
       { id: "gardening", name: "Gardening & Bonsai", blurb: "Growing food, flowers and bonsai.", guides: [] },
-      { id: "science", name: "Science & Nature", blurb: "Bird watching, astronomy and experiments.", guides: [] },
-      { id: "survival", name: "Survival Skills", blurb: "Shelter, fire, water and first steps outdoors.", guides: [] }
+      { id: "science", name: "Science & Nature", blurb: "Bird watching, astronomy and experiments.", guides: [], links: [{ title: "Merlin Bird ID", url: "https://merlin.allaboutbirds.org/" }, { title: "NASA Space Place", url: "https://spaceplace.nasa.gov/" }] },
+      { id: "survival", name: "Survival Skills", blurb: "Shelter, fire, water and first steps outdoors.", guides: [], links: [{ title: "Survivor Library (free PDF archive)", url: "https://www.survivorlibrary.com/" }, { title: "r/PrepperFileShare", url: "https://www.reddit.com/r/PrepperFileShare/" }, { title: "Kiwix (Wikipedia offline)", url: "https://kiwix.org/" }] }
     ]
   },
   {
@@ -46,11 +47,11 @@ const WINGS = [
       { id: "home", name: "Home Care", blurb: "Deep cleaning by material, painting the house and repairs.", guides: [] },
       { id: "clothing", name: "Clothing Care", blurb: "Laundry, stains and mending.", guides: [] },
       { id: "food", name: "Food & Coffee", blurb: "Cooking and craft coffee: tools, beans and brewing.", guides: [] },
-      { id: "business", name: "Money & Business", blurb: "Budgeting, starting a business and licensing.", guides: [] },
+      { id: "business", name: "Money & Business", blurb: "Budgeting, starting a business and licensing.", guides: [], links: [{ title: "SBA business guide (licences and permits)", url: "https://www.sba.gov/business-guide" }] },
       { id: "collecting", name: "Cards & Collecting", blurb: "Organizing trading cards and Magic.", guides: [] },
       { id: "fitness", name: "Fitness", blurb: "Stretching, workouts and posture.", guides: [] },
       { id: "languages", name: "Languages", blurb: "Japanese and more.", guides: [] },
-      { id: "kids", name: "Parenting & Kids", blurb: "Activities and science projects for growing at their own pace.", guides: [] }
+      { id: "kids", name: "Parenting & Kids", blurb: "Activities and science projects for growing at their own pace.", guides: [], links: [{ title: "NASA Space Place", url: "https://spaceplace.nasa.gov/" }] }
     ]
   }
 ];

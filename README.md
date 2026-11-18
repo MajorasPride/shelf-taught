@@ -13,6 +13,7 @@ A library of simple, broken-down how-to guides to teach yourself from, starting 
 - `guides/<shelf>-reviews.js`: end-of-section review quizzes, added to `REVIEWS`.
 - `guides/diagrams.js`: the pictures (SVG), kept apart so guide files stay readable.
 - A new guide file needs a `<script>` line in `index.html`.
+- **Version tags:** every file in `index.html` ends in `?v=8`. When you change any file, raise the number on all of them (v=9, v=10...) so visitors' browsers fetch the new copies instead of mixing old cached files with new ones.
 
 ## Add to the library
 

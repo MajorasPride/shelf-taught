@@ -120,7 +120,7 @@ h2 { font-size: 1.6rem; margin: 2rem 0 .6rem; }
 .facts { display: flex; flex-wrap: wrap; gap: .5rem; padding: 0; list-style: none; }
 .facts li { background: #fff; border: 1px solid #d5d7cf; padding: .15rem .6rem; border-radius: 99px; font-size: .9rem; }
 .analogy { background: #fff; border-left: 6px solid var(--brass); padding: .8rem 1rem; }
-.steps li { margin: .4rem 0; }
+.steps li { margin: .4rem 0; overflow-wrap: anywhere; }
 .steps code, td code { font-size: .95em; }
 figure { margin: 1rem 0; color: var(--lamp); }
 figure svg { width: 100%; max-width: 22rem; }

@@ -79,7 +79,7 @@ function guidePage(id, solo = true) {
       <h2>Side by side</h2>
       <div class="table-wrap"><table>
         <tr>${g.table.head.map(h => `<th>${esc(h)}</th>`).join("")}</tr>
-        ${g.table.rows.map(r => `<tr>${r.map((c, i) => `<td>${i === 2 ? `<code>${esc(c)}</code>` : esc(c)}</td>`).join("")}</tr>`).join("")}
+        ${g.table.rows.map(r => `<tr>${r.map((c, i) => `<td>${i === (g.table.codeCol ?? 2) ?`<code>${esc(c)}</code>` : esc(c)}</td>`).join("")}</tr>`).join("")}
       </table></div>
 
       <h2>Common mistakes</h2>

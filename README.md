@@ -11,7 +11,12 @@ A library of simple, broken-down how-to guides to teach yourself from.
 All content lives in `data.js`:
 
 - **New shelf:** add it to a wing's `shelves` list.
-- **New guide:** add it to `GUIDES`, then put its id in that shelf's `guides` list.
+- **New guide:** add it to `GUIDES`, then put its id in that shelf's `guides` list. The list is in learning order.
+- **Tables:** column 3 shows as code by default. Set `table.codeCol` to another column number, or `-1` for none.
+
+## Shelves filled so far
+
+- **Coding** (10 guides): first program, if, loops, lists, functions, reading errors, Linux terminal, Git, first web page, locking down accounts.
 
 Every guide follows the same template: summary, analogy, tools, steps, picture, comparison table, common mistakes, quiz and links.
 
